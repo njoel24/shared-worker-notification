@@ -4,6 +4,14 @@ if (window.SharedWorker) {
     worker.port.start();
   
     console.log("Connected to Shared Worker.");
+
+    setTimeout(() => {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("service-worker.js").then((registration) => {
+          console.log("Service Worker registered with scope:", registration.scope);
+        });
+      }
+    }, 3000)
   
     // Listen for messages from the shared worker
     worker.port.onmessage = async (event) => {
@@ -17,9 +25,15 @@ if (window.SharedWorker) {
         }
   
         if (Notification.permission === "granted") {
-          new Notification(title, {
-            body: body,
-            icon: "/icon.png", // Optional: add an icon
+          navigator.serviceWorker.ready.then((registration) => {
+            registration.showNotification(title, {
+              body: body,
+              icon: "/icon.png", // Optional icon
+              actions: [
+                { action: "open_tab", title: "Open Tab" }
+              ],
+              tag: "unique-notification-tag", // Ensures only one notification instance
+            });
           });
         } else {
           console.warn("Notifications are blocked.");

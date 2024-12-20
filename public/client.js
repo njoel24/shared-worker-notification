@@ -28,11 +28,11 @@ if (window.SharedWorker) {
           navigator.serviceWorker.ready.then((registration) => {
             registration.showNotification(title, {
               body: body,
-              icon: "/icon.png", // Optional icon
+              tag: `tag ${Date.now()}`,
+              requireInteraction: true,
               actions: [
                 { action: "open_tab", title: "Open Tab" }
               ],
-              tag: "unique-notification-tag", // Ensures only one notification instance
             });
           });
         } else {

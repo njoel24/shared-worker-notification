@@ -3,12 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vite build",
+    "start:server-comet": "node --loader ts-node/esm  ./src/server/server-comet.mts",
+    "start:server-polling": "node --loader ts-node/esm  ./src/server/server-long-polling.mts",
+    "start:server-standard-polling": "node --loader ts-node/esm  ./src/server/server.mts",
+    "start:server-event-source": "node --loader ts-node/esm  ./src/server/server-event-source.mts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "@types/express": "^5.0.0",
+    "body-parser": "^1.20.3",
+    "cometd": "^8.0.6",
+    "cometd-nodejs-server": "^2.0.0",
+    "express": "^4.21.2",
+    "ts-node": "^10.9.2",
+    "tsc": "^2.0.4",
+    "vite": "^6.0.7"
   }
 }

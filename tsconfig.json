@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",                   // Set the JavaScript target version
+      "module": "ESNext",                  // Use ESNext modules for compatibility with modern browsers
+      "lib": ["DOM", "WebWorker", "ES2020"], // Include WebWorker and DOM libraries
+      "moduleResolution": "Node",          // Resolve modules in a Node.js-style way
+      "strict": true,                      // Enable strict type checking
+      "allowJs": true,                     
+      "esModuleInterop": true,             // Enable interoperability with CommonJS
+      "skipLibCheck": true,                // Skip type checking of declaration files
+      "forceConsistentCasingInFileNames": true, // Enforce consistent file naming
+      "outDir": "./dist",                  // Output directory for compiled files
+      "allowSyntheticDefaultImports": true // Support default imports from modules with no default
+    },
+    "include": [
+      "src/**/*.ts",      // Include all TypeScript files in the src folder
+      "src/**/*.d.ts",    // Include TypeScript declaration files
+      "src/**/*.js"    
+    ],
+    "exclude": [
+      "node_modules",     // Exclude the node_modules folder
+      "dist"              // Exclude the output directory
+    ]
+  }
+  

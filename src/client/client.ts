@@ -1,4 +1,5 @@
-if (window.SharedWorker) {
+export function startClient() {
+  if (window.SharedWorker) {
     // Connect to the Shared Worker
     const worker = new SharedWorker("shared-worker.js");
     worker.port.start();
@@ -29,10 +30,7 @@ if (window.SharedWorker) {
             registration.showNotification(title, {
               body: body,
               tag: `tag ${Date.now()}`,
-              requireInteraction: true,
-              actions: [
-                { action: "open_tab", title: "Open Tab" }
-              ],
+              requireInteraction: true
             });
           });
         } else {
@@ -48,4 +46,5 @@ if (window.SharedWorker) {
   } else {
     console.error("Shared Workers are not supported in this browser.");
   }
-  
+}
+

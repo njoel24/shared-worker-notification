@@ -1,9 +1,9 @@
-const express = require("express");
+import express from 'express';
 const app = express();
 const port = 3000;
 
 // Serve static files (client, shared worker)
-app.use(express.static("public"));
+app.use(express.static("dist"));
 
 // Polling endpoint: sends a notification after a delay
 let notificationId = 0;

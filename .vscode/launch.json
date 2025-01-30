@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Run with ts-node",
+        "program": "${file}",
+        "runtimeArgs": ["--loader", "ts-node/esm"],
+        "sourceMaps": true,
+        "resolveSourceMapLocations": ["${workspaceFolder}/**/*.mts"],
+        "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "NODE_OPTIONS": "--experimental-specifier-resolution=node"
+        }
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Run Compiled JS",
+        "program": "${workspaceFolder}/dist/index.js",
+        "sourceMaps": true,
+        "resolveSourceMapLocations": ["${workspaceFolder}/src/**/*.mts"],
+        "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+        "cwd": "${workspaceFolder}"
+      },
+    ]
+  }
+  

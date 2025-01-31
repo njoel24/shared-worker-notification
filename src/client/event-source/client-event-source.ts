@@ -22,6 +22,9 @@ export function startClientEventSource() {
       });
     })
     
+    window.addEventListener("beforeunload", () => {
+      worker.port.postMessage({type: "unsubscribe", channel: 'main-thread'}); // does not work
+    });
 
     
     // Optional: Disconnect when done

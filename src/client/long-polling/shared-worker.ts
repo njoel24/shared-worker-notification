@@ -2,24 +2,23 @@ let clients: any = [];
 let isPolling = false;
 // Function to poll the server for notifications
 async function pollServer() {
-  while (clients.length > 0) {
-    try {
-      console.log("Polling server for notifications...");
-      const response = await fetch("/poll");
-      const data = await response.json();
-      console.log("Received notification:", data);
 
-      // Send the notification to only the first connected client
-      if (clients.length > 0) {
-        clients[0].postMessage({ type: "notification", payload: data });
-      }
-    } catch (err) {
-      console.error("Error polling server:", err);
+  try {
+    console.log("Polling server for notifications...");
+    const response = await fetch("/poll?clientId=client0");
+    const data = await response.json();
+    console.log("Received notification:", data);
+
+    // Send the notification to only the first connected client
+    if (clients.length > 0) {
+      clients[0].postMessage({ type: "notification", payload: data });
     }
-
-    // Wait before polling again
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+  } catch (err) {
+    console.error("Error polling server:", err);
   }
+
+  // Wait before polling again
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   isPolling = false;
 }
 
@@ -53,4 +52,4 @@ export function startSharedWorker() {
   };
 
 }
-
+startSharedWorker();

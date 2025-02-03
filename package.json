@@ -7,8 +7,8 @@
   "scripts": {
     "build": "vite build",
     "start:server-comet": "node --loader ts-node/esm  ./src/server/server-comet.mts",
-    "start:server-polling": "node --loader ts-node/esm  ./src/server/server-long-polling.mts",
-    "start:server-standard-polling": "node --loader ts-node/esm  ./src/server/server.mts",
+    "start:server-long-polling": "node --loader ts-node/esm  ./src/server/server-long-polling.mts",
+    "start:server-polling": "node --loader ts-node/esm  ./src/server/server.mts",
     "start:server-event-source": "node --loader ts-node/esm  ./src/server/server-event-source.mts"
   },
   "author": "",

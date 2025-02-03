@@ -1,66 +1,45 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const port = 3000;
+const PORT = 3000;
+app.use(express.json()); // Parses JSON body automatically
+app.use(express.static('dist'));
+let clients: any = [];
+let interval: any = undefined;
 
-let messages: any[] = [];
-
-// Simulate generating a new message (this could be any asynchronous event in a real-world scenario)
-function generateNewMessage() {
-    return `New message at ${Date.now()}`;
+function removeClient(client: any, clientId: any) {
+    return client.key !== clientId;
 }
 
-// Long-polling endpoint
-app.get('/poll', (req, res) => {
-    const pollInterval = setInterval(() => {
-        if (messages.length > 0) {
-            // Send the first message and clear the message queue
-            const message = messages.shift();
-            res.send(message);
-            clearInterval(pollInterval);  // End the polling once the message is sent
-        }
-    }, 1000); // Check every second for new messages
+app.get('unsubscribe', (req, res) => {
+    console.log('client disconnected')
+    const {clientId} = req.query;
+    clients = clients.filter((client:any) => removeClient(client, clientId));
+    // console.log(filteredNumbers);
+})
 
-    // If the client disconnects, stop checking for messages
+app.get('/poll', (req, res) => {
+    console.log('get new client connected to notification channel');
+    const { clientId } = req.query; 
+    clients = clients.filter((client:any) => removeClient(client, clientId));
+    clients.push({key: clientId, res});
+    // Set the proper headers for SSE
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-cache');
+     setTimeout(() => {
+        clients.forEach((client: any) => {
+            client.res.send(JSON.stringify({"data": "message from server"}));
+        });
+    }, 15000);
+    
+    // Clear interval when the client disconnects
     req.on('close', () => {
-        clearInterval(pollInterval);
+        clearInterval(interval);
+        res.end();
     });
 });
 
-// Endpoint to simulate sending a new message
-app.get('/send', (req, res) => {
-    const newMessage = generateNewMessage();
-    messages.push(newMessage);
-    res.send(`Message sent: ${newMessage}`);
-});
-
-// Serve a basic HTML client (or you could also serve this as a static file)
-app.get('/', (req, res) => {
-    res.send(`
-        <html>
-            <body>
-                <h1>Long Polling Example</h1>
-                <div id="messages"></div>
-                <script>
-                    function poll() {
-                        fetch('/poll')
-                            .then(response => response.text())
-                            .then(data => {
-                                const messageDiv = document.getElementById('messages');
-                                messageDiv.innerHTML += "<p>" + data + "</p>";
-                                poll();  // Re-poll after receiving a message
-                            })
-                            .catch(error => {
-                                console.error('Polling error:', error);
-                                setTimeout(poll, 1000);  // Retry after 1 second if an error occurs
-                            });
-                    }
-                    poll();
-                </script>
-            </body>
-        </html>
-    `);
-});
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -4,7 +4,6 @@ const PORT = 3000;
 app.use(express.json()); // Parses JSON body automatically
 app.use(express.static('dist'));
 let clients: any = [];
-let interval: any = undefined;
 
 function removeClient(client: any, clientId: any) {
     return client.key !== clientId;
@@ -31,12 +30,6 @@ app.get('/poll', (req, res) => {
             client.res.send(JSON.stringify({"data": "message from server"}));
         });
     }, 15000);
-    
-    // Clear interval when the client disconnects
-    req.on('close', () => {
-        clearInterval(interval);
-        res.end();
-    });
 });
 
 // Start the server
